@@ -1,0 +1,12 @@
+{
+  "version": 2,
+  "dgSpecHash": "YgLov/6NyXk=",
+  "success": true,
+  "projectFilePath": "E:\\MagazinOnline\\BackEnd\\MagazinOnline.Api\\MagazinOnline.Api.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\ecosm\\.nuget\\packages\\microsoft.aspnetcore.openapi\\9.0.10\\microsoft.aspnetcore.openapi.9.0.10.nupkg.sha512",
+    "C:\\Users\\ecosm\\.nuget\\packages\\microsoft.entityframeworkcore.tools\\10.0.0\\microsoft.entityframeworkcore.tools.10.0.0.nupkg.sha512",
+    "C:\\Users\\ecosm\\.nuget\\packages\\microsoft.openapi\\1.6.17\\microsoft.openapi.1.6.17.nupkg.sha512"
+  ],
+  "logs": []
+}
