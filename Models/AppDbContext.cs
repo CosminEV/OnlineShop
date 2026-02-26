@@ -1,16 +1,14 @@
-using Microsoft.EntityFrameworkCore;
 using MagazineOnline.Api.Models;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 
-namespace MagazineOnline.Api.Data
+namespace MagazineOnline.Api.Data;
+
+public class AppDbContext : IdentityDbContext<ApplicationUser>
 {
-    public class AppDbContext : DbContext
+    public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
     {
-        //AppDbContext este un tip special de clasa care mosteneste comportamentul de la DbContext
-        // Constructor
-        public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
-        {
-        }
-
-        public DbSet<Product> Products { get; set; }
     }
+
+    public DbSet<Product> Products => Set<Product>();
 }
