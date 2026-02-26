@@ -1,0 +1,35 @@
+@model IReadOnlyList<Product>
+@{
+    ViewData["Title"] = "Home";
+}
+
+<section class="hero p-4 p-md-5 rounded-4 mb-4 text-white">
+    <h1 class="fw-bold">Bine ai venit in Online Shop</h1>
+    <p class="mb-0">Descopera produse premium, preturi corecte si livrare rapida.</p>
+</section>
+
+@if (!Model.Any())
+{
+    <div class="alert alert-info">Momentan nu exista produse afisate.</div>
+}
+else
+{
+    <div class="row g-4">
+        @foreach (var product in Model)
+        {
+            <div class="col-sm-6 col-lg-4">
+                <article class="card h-100 product-card shadow-sm">
+                    <img src="@product.ImageUrl" class="card-img-top" alt="@product.Name">
+                    <div class="card-body d-flex flex-column">
+                        <h5 class="card-title">@product.Name</h5>
+                        <p class="text-muted small">@product.Description</p>
+                        <div class="mt-auto d-flex justify-content-between align-items-center">
+                            <strong class="price">@product.Price.ToString("0.00") lei</strong>
+                            <span class="badge bg-primary">Stoc: @product.Stock</span>
+                        </div>
+                    </div>
+                </article>
+            </div>
+        }
+    </div>
+}
