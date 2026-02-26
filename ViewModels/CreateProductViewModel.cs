@@ -22,13 +22,6 @@ public class CreateProductViewModel
     [Display(Name = "Stoc")]
     public int Stock { get; set; }
 
-    [Required]
-    [Display(Name = "Categorie")]
-    public string Category { get; set; } = "General";
-
-    [Display(Name = "Produs recomandat")]
-    public bool IsFeatured { get; set; }
-
     [Display(Name = "Imagine produs")]
     public IFormFile? ImageFile { get; set; }
 

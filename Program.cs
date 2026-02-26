@@ -1,5 +1,6 @@
 using MagazineOnline.Api.Data;
 using MagazineOnline.Api.Models;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -24,7 +25,6 @@ builder.Services.ConfigureApplicationCookie(options =>
 {
     options.LoginPath = "/Account/Login";
     options.AccessDeniedPath = "/Account/Login";
-    options.SlidingExpiration = true;
 });
 
 var googleClientId = builder.Configuration["Authentication:Google:ClientId"];
@@ -61,15 +61,6 @@ if (!string.IsNullOrWhiteSpace(githubClientId) && !string.IsNullOrWhiteSpace(git
     });
 }
 
-builder.Services.AddDistributedMemoryCache();
-builder.Services.AddSession(options =>
-{
-    options.Cookie.Name = "OnlineShop.Session";
-    options.Cookie.HttpOnly = true;
-    options.Cookie.IsEssential = true;
-    options.IdleTimeout = TimeSpan.FromHours(2);
-});
-
 builder.Services.AddControllersWithViews();
 
 var app = builder.Build();
@@ -84,42 +75,27 @@ using (var scope = app.Services.CreateScope())
         dbContext.Products.AddRange(
             new Product
             {
-                Name = "Casti Wireless Pro",
-                Description = "Anulare activa de zgomot, baterie 30h si sunet premium.",
-                Price = 349.99m,
-                Stock = 20,
-                Category = "Audio",
-                IsFeatured = true,
-                ImageUrl = "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=1200"
+                Name = "Casti Wireless",
+                Description = "Casti Bluetooth cu anulare de zgomot si autonomie 30h.",
+                Price = 249.99m,
+                Stock = 10,
+                ImageUrl = "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=800"
             },
             new Product
             {
-                Name = "Laptop Ultrabook X",
-                Description = "Procesor puternic, SSD rapid, design slim pentru productivitate.",
-                Price = 4299.00m,
-                Stock = 8,
-                Category = "Laptopuri",
-                IsFeatured = true,
-                ImageUrl = "https://images.unsplash.com/photo-1496181133206-80ce9b88a853?w=1200"
+                Name = "Laptop Ultrabook",
+                Description = "Laptop subtire, 16GB RAM, SSD 512GB, ideal pentru lucru si studiu.",
+                Price = 3999.00m,
+                Stock = 5,
+                ImageUrl = "https://images.unsplash.com/photo-1496181133206-80ce9b88a853?w=800"
             },
             new Product
             {
-                Name = "Smartwatch Fit",
-                Description = "Monitorizare fitness, puls si GPS cu autonomie extinsa.",
-                Price = 899.50m,
-                Stock = 16,
-                Category = "Wearables",
-                IsFeatured = true,
-                ImageUrl = "https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=1200"
-            },
-            new Product
-            {
-                Name = "Camera 4K",
-                Description = "Filmare 4K stabilizata pentru creatori de continut.",
-                Price = 2799m,
-                Stock = 6,
-                Category = "Foto-Video",
-                ImageUrl = "https://images.unsplash.com/photo-1516035069371-29a1b244cc32?w=1200"
+                Name = "Smartwatch Sport",
+                Description = "Ceas inteligent cu monitorizare puls, GPS si rezistenta la apa.",
+                Price = 799.50m,
+                Stock = 15,
+                ImageUrl = "https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=800"
             }
         );
         dbContext.SaveChanges();
@@ -135,7 +111,6 @@ if (!app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseRouting();
-app.UseSession();
 
 app.UseAuthentication();
 app.UseAuthorization();

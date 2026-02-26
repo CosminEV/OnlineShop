@@ -9,9 +9,6 @@ namespace MagazineOnline.Api.Controllers;
 [Authorize]
 public class ProductsController : Controller
 {
-    private static readonly string[] AllowedImageExtensions = [".jpg", ".jpeg", ".png", ".webp"];
-    private const long MaxUploadSize = 5 * 1024 * 1024;
-
     private readonly AppDbContext _dbContext;
     private readonly IWebHostEnvironment _environment;
 
@@ -22,7 +19,10 @@ public class ProductsController : Controller
     }
 
     [HttpGet]
-    public IActionResult Create() => View();
+    public IActionResult Create()
+    {
+        return View();
+    }
 
     [HttpPost]
     [ValidateAntiForgeryToken]
@@ -37,22 +37,10 @@ public class ProductsController : Controller
 
         if (model.ImageFile is not null && model.ImageFile.Length > 0)
         {
-            if (model.ImageFile.Length > MaxUploadSize)
-            {
-                ModelState.AddModelError(nameof(model.ImageFile), "Imaginea trebuie sa aiba maxim 5MB.");
-                return View(model);
-            }
-
-            var extension = Path.GetExtension(model.ImageFile.FileName).ToLowerInvariant();
-            if (!AllowedImageExtensions.Contains(extension))
-            {
-                ModelState.AddModelError(nameof(model.ImageFile), "Format invalid. Foloseste JPG, PNG sau WEBP.");
-                return View(model);
-            }
-
             var uploadsDirectory = Path.Combine(_environment.WebRootPath, "uploads");
             Directory.CreateDirectory(uploadsDirectory);
 
+            var extension = Path.GetExtension(model.ImageFile.FileName);
             var imageName = $"{Guid.NewGuid()}{extension}";
             var filePath = Path.Combine(uploadsDirectory, imageName);
 
@@ -74,8 +62,6 @@ public class ProductsController : Controller
             Description = model.Description,
             Price = model.Price,
             Stock = model.Stock,
-            Category = model.Category,
-            IsFeatured = model.IsFeatured,
             ImageUrl = imageUrl
         };
 
