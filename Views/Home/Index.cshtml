@@ -1,0 +1,108 @@
+@model MagazineOnline.Api.ViewModels.HomeIndexViewModel
+@{
+    ViewData["Title"] = "Home";
+}
+
+<section class="hero p-4 p-md-5 rounded-4 mb-4 text-white shadow">
+    <div class="row align-items-center g-4">
+        <div class="col-lg-8">
+            <h1 class="display-6 fw-bold mb-3">Online Shop Premium</h1>
+            <p class="lead mb-0">Produse atent selectate, design modern si experienta rapida de cumparare.</p>
+        </div>
+        <div class="col-lg-4 text-lg-end">
+            <a asp-controller="Cart" asp-action="Index" class="btn btn-light btn-lg">Vezi cosul</a>
+        </div>
+    </div>
+</section>
+
+@if (Model.FeaturedProducts.Any())
+{
+    <section class="mb-4">
+        <h2 class="h4 mb-3">Produse recomandate</h2>
+        <div class="row g-3">
+            @foreach (var featured in Model.FeaturedProducts)
+            {
+                <div class="col-md-4">
+                    <div class="card h-100 border-0 shadow-sm">
+                        <img src="@featured.ImageUrl" class="card-img-top featured-img" alt="@featured.Name" />
+                        <div class="card-body">
+                            <h3 class="h6">@featured.Name</h3>
+                            <p class="mb-0 text-primary fw-bold">@featured.Price.ToString("0.00") lei</p>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </section>
+}
+
+<form method="get" class="card p-3 mb-4 shadow-sm border-0">
+    <div class="row g-2">
+        <div class="col-md-5">
+            <input class="form-control" type="text" name="q" value="@Model.SearchTerm" placeholder="Cauta produse..." />
+        </div>
+        <div class="col-md-3">
+            <select class="form-select" name="category">
+                <option value="">Toate categoriile</option>
+                @foreach (var category in Model.Categories)
+                {
+                    <option value="@category" selected="@(Model.Category == category)">@category</option>
+                }
+            </select>
+        </div>
+        <div class="col-md-3">
+            <select class="form-select" name="sort">
+                <option value="">Cele mai noi</option>
+                <option value="price_asc" selected="@(Model.Sort == "price_asc")">Pret crescator</option>
+                <option value="price_desc" selected="@(Model.Sort == "price_desc")">Pret descrescator</option>
+                <option value="name" selected="@(Model.Sort == "name")">Nume A-Z</option>
+            </select>
+        </div>
+        <div class="col-md-1 d-grid">
+            <button class="btn btn-primary">Go</button>
+        </div>
+    </div>
+</form>
+
+@if (!Model.Products.Any())
+{
+    <div class="alert alert-info">Nu am gasit produse pentru filtrele selectate.</div>
+}
+else
+{
+    <div class="row g-4">
+        @foreach (var product in Model.Products)
+        {
+            <div class="col-sm-6 col-xl-3">
+                <article class="card h-100 product-card shadow-sm border-0">
+                    <img src="@product.ImageUrl" class="card-img-top" alt="@product.Name">
+                    <div class="card-body d-flex flex-column">
+                        <div class="mb-2 d-flex justify-content-between align-items-center">
+                            <span class="badge text-bg-light">@product.Category</span>
+                            @if (product.IsFeatured)
+                            {
+                                <span class="badge text-bg-warning">Top</span>
+                            }
+                        </div>
+                        <h5 class="card-title">@product.Name</h5>
+                        <p class="text-muted small">@product.Description</p>
+                        <div class="mt-auto">
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                <strong class="price">@product.Price.ToString("0.00") lei</strong>
+                                <span class="badge bg-primary">Stoc: @product.Stock</span>
+                            </div>
+                            <div class="d-flex gap-2">
+                                <a asp-action="Details" asp-route-id="@product.Id" class="btn btn-outline-secondary btn-sm w-50">Detalii</a>
+                                <form asp-controller="Cart" asp-action="Add" method="post" class="w-50">
+                                    @Html.AntiForgeryToken()
+                                    <input type="hidden" name="productId" value="@product.Id" />
+                                    <button class="btn btn-primary btn-sm w-100">Adauga</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </article>
+            </div>
+        }
+    </div>
+}
